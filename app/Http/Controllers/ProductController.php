@@ -3,68 +3,78 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use App\Models\Category;
+use App\Services\ProductService;
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
 
 class ProductController extends Controller
 {
-    public function __construct()
+    public function __construct(private ProductService $service)
     {
         $this->authorizeResource(Product::class, 'product');
     }
-    /**
-     * Display a listing of the resource.
-     */
+
     public function index()
     {
-        //
+        $products = Product::forUser(auth()->user())->paginate(10);
+
+        return view('products.index', compact('products'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        return view('products.create', [
+            'categories' => Category::all(),
+        ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(StoreProductRequest $request)
     {
-        //
+        try {
+            $this->service->create(
+                $request->validated(),
+                auth()->user()->vendor->id
+            );
+
+            return redirect()->route('products.index')
+                ->with('success', 'Product created successfully');
+
+        } catch (\RuntimeException $e) {
+            return back()->withErrors($e->getMessage())->withInput();
+        }
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Product $product)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(Product $product)
     {
-        //
+        return view('products.edit', [
+            'product' => $product,
+            'categories' => Category::all(),
+        ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(UpdateProductRequest $request, Product $product)
     {
-        //
+        try {
+            $this->service->update($product, $request->validated());
+
+            return redirect()->route('products.index')
+                ->with('success', 'Product updated successfully');
+
+        } catch (\RuntimeException $e) {
+            return back()->withErrors($e->getMessage())->withInput();
+        }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Product $product)
     {
-        //
+        try {
+            $this->service->delete($product);
+
+            return back()->with('success', 'Product deleted');
+
+        } catch (\RuntimeException $e) {
+            return back()->withErrors($e->getMessage());
+        }
     }
 }

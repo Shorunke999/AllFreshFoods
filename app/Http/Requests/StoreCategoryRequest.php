@@ -11,7 +11,7 @@ class StoreCategoryRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -19,10 +19,18 @@ class StoreCategoryRequest extends FormRequest
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
-    public function rules(): array
+     public function rules(): array
     {
         return [
-            //
+            'name' => ['required', 'string', 'max:255', 'unique:categories,name'],
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'name.required' => 'Category name is required.',
+            'name.unique'   => 'This category already exists.',
         ];
     }
 }
