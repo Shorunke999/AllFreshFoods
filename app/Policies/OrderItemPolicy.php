@@ -21,6 +21,14 @@ class OrderItemPolicy
      */
     public function view(User $user, OrderItem $orderItem): bool
     {
+        if ($user->isVendor()) {
+            return $orderItem->vendor_id === $user->vendor->id;
+        }
+
+        if ($user->isAdmin()) {
+            return true;
+        }
+
         return false;
     }
 
@@ -29,7 +37,7 @@ class OrderItemPolicy
      */
     public function create(User $user): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -37,7 +45,8 @@ class OrderItemPolicy
      */
     public function update(User $user, OrderItem $orderItem): bool
     {
-        return false;
+        return $user->isVendor()
+            && $orderItem->vendor_id === $user->vendor->id;
     }
 
     /**

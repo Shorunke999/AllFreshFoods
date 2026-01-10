@@ -13,7 +13,7 @@ class OrderPolicy
      */
     public function viewAny(User $user): bool
     {
-        return false;
+         return $user->isAdmin();
     }
 
     /**
@@ -21,6 +21,22 @@ class OrderPolicy
      */
     public function view(User $user, Order $order): bool
     {
+          if ($user->isAdmin()) {
+            return true;
+        }
+
+        // Customer can see own order
+        if ($user->id === $order->user_id) {
+            return true;
+        }
+
+        // Vendor: if they have at least one order item in it
+        if ($user->isVendor()) {
+            return $order->items()
+                ->where('vendor_id', $user->vendor->id)
+                ->exists();
+        }
+
         return false;
     }
 

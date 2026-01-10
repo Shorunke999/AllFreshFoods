@@ -1,7 +1,10 @@
 <?php
 
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\OrderController;
+use App\Http\Controllers\OrderItemController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Vendor\DashboardController as VendorDashboardController;
@@ -49,7 +52,13 @@ Route::middleware(['auth'])->group(function () {
         ->group(function () {
             Route::get('/dashboard', [VendorDashboardController::class, 'index'])->name('dashboard');
             Route::resource('products', ProductController::class);
-            //Route::resource('orders', OrderController::class)->only(['index']);
-        });
+            Route::resource('/order/item', OrderItemController::class)->only('update');
+    });
+    Route::resource('orders', OrderController::class)->only(['index','store','show']);
 });
 
+Route::controller(CartController::class)->group(function(){
+    Route::post('/cart/{product}','store')->name('cart.add');
+
+    Route::get('/cart','index');
+});

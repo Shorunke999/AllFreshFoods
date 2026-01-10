@@ -5,15 +5,34 @@ namespace App\Http\Controllers;
 use App\Models\Order;
 use App\Http\Requests\StoreOrderRequest;
 use App\Http\Requests\UpdateOrderRequest;
+use App\Services\CartService;
+use App\Services\OrderService;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class OrderController extends Controller
 {
+    use AuthorizesRequests;
+
+    protected $cart;
+    protected $orderService;
+
+    public function  __construct()
+    {
+        $this->cart = new CartService();
+        $this->orderService = new OrderService();
+    }
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        //
+        $this->authorize('viewAny', Order::class);
+
+        $orders = Order::with('user')
+            ->latest()
+            ->paginate(15);
+
+        return view('admin.orders.index', compact('orders'));
     }
 
     /**
@@ -29,7 +48,17 @@ class OrderController extends Controller
      */
     public function store(StoreOrderRequest $request)
     {
-        //
+        try {
+            $order = $this->orderService->checkout(auth()->user(),$this->cart->items());
+
+            $this->cart->clear();
+
+            // Mail::to(auth()->user())->send(new OrderPlacedMail($order));
+
+            return redirect()->route('orders.show', $order);
+        } catch (\RuntimeException $e) {
+            return back()->with('error',$e->getMessage());
+        }
     }
 
     /**
@@ -37,7 +66,9 @@ class OrderController extends Controller
      */
     public function show(Order $order)
     {
-        //
+        $this->authorize('view', $order);
+        $order = $this->orderService->normalizeOrder($order,auth()->user());
+        return view('orders.show', compact('order'));
     }
 
     /**

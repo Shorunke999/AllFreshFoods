@@ -5,9 +5,18 @@ namespace App\Http\Controllers;
 use App\Models\OrderItem;
 use App\Http\Requests\StoreOrderItemRequest;
 use App\Http\Requests\UpdateOrderItemRequest;
+use App\Services\OrderService;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class OrderItemController extends Controller
 {
+    use AuthorizesRequests;
+    protected $orderService;
+
+    public function  __construct()
+    {
+        $this->orderService = new OrderService();
+    }
     /**
      * Display a listing of the resource.
      */
@@ -53,7 +62,16 @@ class OrderItemController extends Controller
      */
     public function update(UpdateOrderItemRequest $request, OrderItem $orderItem)
     {
-        //
+
+        $this->authorize('update', $orderItem);
+
+        $orderItem->update([
+            'status' => $request->status,
+        ]);
+
+        $this->orderService->sync($orderItem->order);
+
+        return back()->with('success', 'Order status updated');
     }
 
     /**
