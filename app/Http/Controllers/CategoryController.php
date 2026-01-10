@@ -8,16 +8,20 @@ use App\Services\CategoryService;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreCategoryRequest;
 use App\Http\Requests\UpdateCategoryRequest;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class CategoryController extends Controller
 {
+    use AuthorizesRequests;
+
     public function __construct(private CategoryService $service)
     {
-        $this->authorizeResource(Category::class, 'category');
+
     }
 
     public function index()
     {
+        $this->authorize('viewAny', Category::class);
         $categories = Category::latest()->paginate(10);
 
         return view('admin.categories.index', compact('categories'));
@@ -25,11 +29,13 @@ class CategoryController extends Controller
 
     public function create()
     {
+        $this->authorize('create', Category::class);
         return view('admin.categories.create');
     }
 
     public function store(StoreCategoryRequest $request)
     {
+        $this->authorize('create', Category::class);
         try {
             $this->service->create($request->validated());
 
@@ -44,11 +50,13 @@ class CategoryController extends Controller
 
     public function edit(Category $category)
     {
+        $this->authorize('update', $category);
         return view('admin.categories.edit', compact('category'));
     }
 
     public function update(UpdateCategoryRequest $request, Category $category)
     {
+        $this->authorize('update', $category);
         try {
             $this->service->update($category, $request->validated());
 
@@ -63,6 +71,7 @@ class CategoryController extends Controller
 
     public function destroy(Category $category)
     {
+        $this->authorize('delete', $category);
         try {
             $this->service->delete($category);
 
