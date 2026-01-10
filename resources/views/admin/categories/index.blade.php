@@ -37,7 +37,7 @@
                                 {{ $category->name }}
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                {{ $category->products_count }}
+                                {{ $category->products->count() }}
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                 {{ $category->created_at->format('M d, Y') }}

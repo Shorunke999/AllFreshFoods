@@ -19,6 +19,10 @@ class DashboardController extends Controller
             'pendingOrders' => OrderItem::where('vendor_id', $vendorId)
                 ->where('status', OrderItemStatus::PENDING)
                 ->count(),
+            'recent_products' => Product::where('vendor_id', $vendorId)
+                ->latest()
+                ->take(5)
+                ->get(),
         ]);
     }
 }

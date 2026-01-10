@@ -9,6 +9,31 @@ use Throwable;
 
 class ProductService
 {
+    public function listProducts($user)
+    {
+        $request = request();
+        $user = auth()->user();
+        $query = Product::query()->forUser($user);
+
+        // Search filter
+        if ($request->filled('search')) {
+            $query->where('name', 'like', '%' . $request->search . '%');
+        }
+
+        // Category filter
+        if ($request->filled('category_id')) {
+            $query->where('category_id', $request->category_id);
+        }
+
+        if ($request->filled('vendor_id') && $user->role->value === 'admin') {
+            $query->where('vendor_id', $request->vendor_id);
+        }
+
+        // Pagination
+        $products = $query->latest()->paginate(10)->withQueryString();
+
+        return $products;
+    }
     public function create(array $data, int $vendorId): Product
     {
         try {

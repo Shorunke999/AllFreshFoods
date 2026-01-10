@@ -38,13 +38,12 @@ class CategoryController extends Controller
         $this->authorize('create', Category::class);
         try {
             $this->service->create($request->validated());
-
             return redirect()
                 ->route('admin.categories.index')
                 ->with('success', 'Category created successfully.');
 
         } catch (\RuntimeException $e) {
-            return back()->withErrors($e->getMessage())->withInput();
+            return back()->with('error', $e->getMessage())->withInput();
         }
     }
 
@@ -65,7 +64,7 @@ class CategoryController extends Controller
                 ->with('success', 'Category updated successfully.');
 
         } catch (\RuntimeException $e) {
-            return back()->withErrors($e->getMessage())->withInput();
+            return back()->with('error',$e->getMessage())->withInput();
         }
     }
 
@@ -78,7 +77,7 @@ class CategoryController extends Controller
             return back()->with('success', 'Category deleted successfully.');
 
         } catch (\RuntimeException $e) {
-            return back()->withErrors($e->getMessage());
+            return back()->with('error',$e->getMessage());
         }
     }
 }

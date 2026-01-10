@@ -1,5 +1,4 @@
 <?php
-
 namespace Database\Seeders;
 
 use App\Enums\UserRole;
@@ -31,6 +30,7 @@ class DatabaseSeeder extends Seeder
             'password' => bcrypt('password'), // password
             'role' => UserRole::ADMIN->value,
         ]);
+
         $users = User::where('role', UserRole::VENDOR->value)->get();
         $users->each(fn ($user) =>
             Vendor::factory()->create([
@@ -42,6 +42,5 @@ class DatabaseSeeder extends Seeder
             CategorySeeder::class,
             ProductSeeder::class,
         ]);
-
     }
 }

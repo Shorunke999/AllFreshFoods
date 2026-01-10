@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\UserRole;
 use App\Models\Product;
 use App\Models\Category;
 use App\Services\ProductService;
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
+use App\Models\Vendor;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
@@ -20,9 +23,13 @@ class ProductController extends Controller
     public function index()
     {
         $this->authorize('viewAny', Product::class);
-        return view('vendor.products.index', [
-            'products' => Product::forUser(auth()->user())->paginate(10),
+        $products = $this->service->listProducts(auth()->user());
+        $role = auth()->user()->role->value;
+
+        return view($role.'.products.index', [
+            'products' => $products,
             'categories' => Category::all(),
+            'vendors' => $role === UserRole::ADMIN->value? Vendor::all() : null,
         ]);
     }
 
