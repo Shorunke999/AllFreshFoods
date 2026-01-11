@@ -421,7 +421,7 @@ For issues and questions, please open an issue in the GitHub repository.
 
 ## Acknowledgments
 
-- Built with Laravel 11
+- Built with Laravel 12
 - UI components from Laravel Breeze
 - Styled with Tailwind CSS
 - Icons from Heroicons
