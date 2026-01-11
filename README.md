@@ -150,12 +150,9 @@ This will create:
 - Sample orders with order items
 
 ### Test Credential(Login)
-custmer 
-        email is  test@example1.com
-vendor
-        email is  test@example.com
-admin
-    email is  admin@example.com
+-custmer email is  test@example1.com
+-vendor email is  test@example.com
+-admin email is  admin@example.com
 
 password is "password"
 
