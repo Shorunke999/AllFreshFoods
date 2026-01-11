@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Enums\UserRole;
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\Vendor;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -22,16 +24,27 @@ class RegisteredUserController extends Controller
         return view('auth.register');
     }
 
+    public function showCustomerForm()
+    {
+        return view('auth.register-customer');
+    }
+
+    public function showVendorForm()
+    {
+        return view('auth.register-vendor');
+    }
+
+
     /**
      * Handle an incoming registration request.
      *
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function store(Request $request): RedirectResponse
+      public function storeCustomer(Request $request)
     {
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
@@ -39,12 +52,42 @@ class RegisteredUserController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'role' => UserRole::CUSTOMER,
         ]);
 
         event(new Registered($user));
-
         Auth::login($user);
 
-        return redirect(route('dashboard', absolute: false));
+        return redirect()->route('dashboard');
     }
+
+    public function storeVendor(Request $request)
+    {
+        $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'vendor_name' => ['required', 'string', 'max:255', 'unique:vendors,name'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+        ]);
+
+        // Create vendor first
+        $vendor = Vendor::create([
+            'name' => $request->vendor_name,
+        ]);
+
+        // Create user linked to vendor
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'role' => UserRole::VENDOR,
+            'vendor_id' => $vendor->id,
+        ]);
+
+        event(new Registered($user));
+        Auth::login($user);
+
+        return redirect()->route('dashboard');
+    }
+
 }

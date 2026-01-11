@@ -8,6 +8,7 @@ use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Product;
 use App\Models\User;
+use Exception;
 use Illuminate\Support\Facades\DB;
 use Throwable;
 
@@ -20,7 +21,7 @@ class OrderService
 
                 $order = Order::create([
                     'user_id' => $user->id,
-                    'total' => collect($cart)->sum(fn ($i) => $i['price'] * $i['quantity']),
+                    'total' => collect($cart)->sum(fn ($i) => intval($i['price']) * $i['quantity']),
                     'status' => OrderStatus::PENDING,
                 ]);
 
@@ -31,6 +32,7 @@ class OrderService
                         'vendor_id' => $item['vendor_id'],
                         'price' => $item['price'],
                         'quantity' => $item['quantity'],
+                        'status' => OrderItemStatus::PENDING
                     ]);
 
                     Product::whereId($item['product_id'])

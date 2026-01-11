@@ -94,4 +94,21 @@ class ProductController extends Controller
             return back()->withErrors($e->getMessage());
         }
     }
+    public function catalog(Request $request)
+    {
+        $query = Product::with(['vendor', 'category'])->where('stock', '>', 0);
+
+        if ($request->search) {
+            $query->where('name', 'like', "%{$request->search}%");
+        }
+
+        if ($request->category_id) {
+            $query->where('category_id', $request->category_id);
+        }
+
+        $products = $query->paginate(12);
+        $categories = Category::all();
+
+        return view('products.index', compact('products', 'categories'));
+    }
 }

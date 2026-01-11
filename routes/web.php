@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\UserRole;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoryController;
@@ -19,9 +20,11 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::get('/dashboard/redirect', function () {
-    return auth()->user()->isAdmin()
-        ? redirect()->route('admin.dashboard')
-        : redirect()->route('vendor.dashboard');
+    return match (auth()->user()->role) {
+        UserRole::ADMIN => redirect()->route('admin.dashboard'),
+        UserRole::CUSTOMER => redirect()->route('products.catalog'),
+        UserRole::VENDOR => redirect()->route('vendor.dashboard')
+    };
 })->name('dashboard.redirect')->middleware('auth');
 
 
@@ -42,7 +45,7 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
             Route::resource('categories', CategoryController::class);
             Route::resource('products', ProductController::class);
-            //Route::resource('orders', OrderController::class)->only(['index']);
+            Route::resource('orders', OrderController::class)->only(['index']);
         });
 
     // Vendor Routes
@@ -52,7 +55,7 @@ Route::middleware(['auth'])->group(function () {
         ->group(function () {
             Route::get('/dashboard', [VendorDashboardController::class, 'index'])->name('dashboard');
             Route::resource('products', ProductController::class);
-            Route::resource('/order/item', OrderItemController::class)->only('update');
+            Route::resource('order', OrderItemController::class)->only('update');
     });
     Route::resource('orders', OrderController::class)->only(['index','store','show']);
 });
@@ -61,4 +64,10 @@ Route::controller(CartController::class)->group(function(){
     Route::post('/cart/{product}','store')->name('cart.add');
 
     Route::get('/cart','index');
+     Route::put('/cart/{product}', 'update')->name('cart.update');
+    Route::delete('/cart/destroy/{product}', 'destroy')->name('cart.destroy');
 });
+Route::get('/products', [ProductController::class, 'catalog'])->name('products.catalog');
+
+
+

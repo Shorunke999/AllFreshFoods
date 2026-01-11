@@ -48,14 +48,15 @@ class OrderController extends Controller
      */
     public function store(StoreOrderRequest $request)
     {
+        $this->authorize('create', Order::class);
         try {
-            $order = $this->orderService->checkout(auth()->user(),$this->cart->items());
+            $order = $this->orderService->checkout(auth()->user(),session('cart', []));
 
             $this->cart->clear();
 
             // Mail::to(auth()->user())->send(new OrderPlacedMail($order));
 
-            return redirect()->route('orders.show', $order);
+            return redirect()->route('orders.show', $order)->with('success', 'Checkout successfully');
         } catch (\RuntimeException $e) {
             return back()->with('error',$e->getMessage());
         }

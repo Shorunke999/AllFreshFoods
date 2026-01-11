@@ -20,8 +20,7 @@
                 Products
             </a>
 
-            {{-- <a href="{{ route('admin.orders.index') }}" --}}
-            <a href="#"
+            <a href="{{ route('admin.orders.index') }}"
                class="group flex items-center px-2 py-2 text-sm font-medium rounded-md mt-1 {{ request()->routeIs('admin.orders.*') ? 'bg-gray-900' : 'hover:bg-gray-700' }}">
                 Orders
             </a>

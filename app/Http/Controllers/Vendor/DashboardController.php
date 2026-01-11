@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\OrderItem;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
 {
@@ -23,6 +24,8 @@ class DashboardController extends Controller
                 ->latest()
                 ->take(5)
                 ->get(),
+            'revenue' => OrderItem::where('vendor_id', $vendorId)
+            ->where('status', 'delivered')->sum(DB::raw('price * quantity')),
         ]);
     }
 }

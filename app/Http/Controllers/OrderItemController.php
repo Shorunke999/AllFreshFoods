@@ -22,7 +22,12 @@ class OrderItemController extends Controller
      */
     public function index()
     {
-        //
+        $orderItems = OrderItem::where('vendor_id', auth()->user()->vendor->id)
+            ->with(['product', 'order.user'])
+            ->latest()
+            ->paginate(15);
+
+        return view('vendor.orders.index', compact('orderItems'));
     }
 
     /**
