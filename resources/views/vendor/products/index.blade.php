@@ -40,7 +40,7 @@
             @forelse($products as $product)
                 <div class="bg-white overflow-hidden shadow-sm rounded-lg">
                     @if($product->image_path)
-                        <img src="{{ Storage::url($product->image_path) }}"
+                        <img src="{{ Storage::url($product->image_path)  ?? $product->image_path }}"
                              alt="{{ $product->name }}"
                              class="w-full h-48 object-cover">
                     @else

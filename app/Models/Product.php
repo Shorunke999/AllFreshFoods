@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
+use Illuminate\Container\Attributes\Storage;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage as FacadesStorage;
 
 class Product extends Model
 {
@@ -37,5 +39,18 @@ class Product extends Model
         }
 
         return $query->where('vendor_id', $user->vendor->id);
+    }
+    public function getImageUrlAttribute(): ?string
+    {
+        if (!$this->image_path) {
+            return null;
+        }
+
+        if (str_starts_with($this->image_path, 'http')) {
+            return $this->image_path;
+        }
+
+        // Otherwise, it's a storage path
+        return FacadesStorage::url($this->image_path);
     }
 }

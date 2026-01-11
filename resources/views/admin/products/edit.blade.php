@@ -87,7 +87,7 @@
                     <input type="file" name="image" id="image" accept="image/*"
                            class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
                     @if($product->image_path)
-                        <img src="{{ Storage::url($product->image_path) }}"
+                        <img src="{{  $product->image_url }}"
                              alt="Current image"
                              class="mt-3 w-32 h-32 object-cover rounded">
                     @endif
