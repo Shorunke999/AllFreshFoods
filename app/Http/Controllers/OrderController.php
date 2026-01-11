@@ -5,9 +5,11 @@ namespace App\Http\Controllers;
 use App\Models\Order;
 use App\Http\Requests\StoreOrderRequest;
 use App\Http\Requests\UpdateOrderRequest;
+use App\Mail\OrderPlacedMail;
 use App\Services\CartService;
 use App\Services\OrderService;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Support\Facades\Mail;
 
 class OrderController extends Controller
 {
@@ -54,7 +56,7 @@ class OrderController extends Controller
 
             $this->cart->clear();
 
-            // Mail::to(auth()->user())->send(new OrderPlacedMail($order));
+            Mail::to(auth()->user())->send(new OrderPlacedMail($order));
 
             return redirect()->route('orders.show', $order)->with('success', 'Checkout successfully');
         } catch (\RuntimeException $e) {
