@@ -1,59 +1,427 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# AllFreshFoods - Multi-Vendor Grocery Store Platform
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A Laravel-based multi-vendor e-commerce platform that enables customers to shop from multiple grocery vendors in one place, while allowing vendors to manage their products and orders independently.
 
-## About Laravel
+## Project Description
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+AllFreshFoods is a comprehensive multi-vendor grocery marketplace built with Laravel 11. The platform facilitates seamless transactions between customers and multiple food vendors, featuring role-based access control, real-time inventory management, and an intuitive order processing system.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+### Key Features
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- **Multi-Vendor Support**: Multiple vendors can sell products on a single platform
+- **Role-Based Access Control**: Three distinct user roles (Admin, Vendor, Customer)
+- **Product Management**: Full CRUD operations with image uploads and categorization
+- **Shopping Cart**: Session-based cart with quantity management and stock validation
+- **Order Management**: Multi-vendor order splitting with vendor-specific order items
+- **Email Notifications**: Automated order confirmation emails
+- **Authentication**: Laravel Breeze with role-specific registration
+- **Responsive UI**: Tailwind CSS for modern, mobile-friendly design
 
-## Learning Laravel
+## User Roles
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+### 1. Admin
+- Manage all products across all vendors
+- Manage product categories
+- View all orders system-wide
+- Access admin dashboard with comprehensive statistics
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### 2. Vendor
+- Manage only their own products
+- View and update order items for their products
+- Track sales and revenue
+- Access vendor-specific dashboard
 
-## Laravel Sponsors
+### 3. Customer
+- Browse products from all vendors
+- Add products to cart with quantity selection
+- Place orders
+- View order history and track order status
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+## Technology Stack
 
-### Premium Partners
+- **Framework**: Laravel 11
+- **PHP**: 8.2+
+- **Frontend**: Blade Templates, Tailwind CSS, Alpine.js
+- **Database**: MySQL/PostgreSQL
+- **Authentication**: Laravel Breeze
+- **File Storage**: Laravel Storage (local/public disk)
+- **Email**: Laravel Mail with Markdown templates
+- **Queue**: Database queue driver
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+## Prerequisites
+
+- PHP 8.2 or higher
+- Composer
+- MySQL 5.7+ or PostgreSQL
+- Node.js & NPM
+- Git
+
+## Installation Steps
+
+### 1. Clone the Repository
+
+```bash
+git clone <repository-url>
+cd allfreshfoods
+```
+
+### 2. Install Dependencies
+
+```bash
+# Install PHP dependencies
+composer install
+
+# Install Node dependencies
+npm install
+```
+
+### 3. Environment Configuration
+
+```bash
+# Copy environment file
+cp .env.example .env
+
+# Generate application key
+php artisan key:generate
+```
+
+### 4. Configure Database
+
+Edit `.env` file with your database credentials:
+
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=allfreshfoods
+DB_USERNAME=your_username
+DB_PASSWORD=your_password
+```
+
+### 5. Configure Email (Optional)
+
+For email notifications, configure your mail settings in `.env`:
+
+```env
+MAIL_MAILER=smtp
+MAIL_HOST=smtp.mailtrap.io
+MAIL_PORT=2525
+MAIL_USERNAME=your_mailtrap_username
+MAIL_PASSWORD=your_mailtrap_password
+MAIL_ENCRYPTION=tls
+MAIL_FROM_ADDRESS="noreply@allfreshfoods.com"
+MAIL_FROM_NAME="AllFreshFoods"
+```
+
+For testing, you can use:
+```env
+MAIL_MAILER=log
+```
+
+### 6. Configure Application URL
+
+```env
+APP_URL=http://localhost:8000
+```
+
+### 7. Run Migrations
+
+```bash
+php artisan migrate
+```
+
+### 8. Create Storage Link
+
+```bash
+php artisan storage:link
+```
+
+### 9. Seed Database
+
+```bash
+php artisan db:seed
+```
+
+This will create:
+- 1 Admin user
+- 5 Vendors with associated user accounts
+- 10 Product categories
+- 50 Products distributed across vendors
+- Sample orders with order items
+
+### 10. Build Frontend Assets
+
+```bash
+npm run build
+
+# Or for development with hot reload
+npm run dev
+```
+
+### 11. Start the Application
+
+```bash
+php artisan serve
+```
+
+Visit: `http://localhost:8000`
+
+### 12. Start Queue Worker (Optional)
+
+For email notifications to work asynchronously:
+
+```bash
+php artisan queue:work
+```
+
+## Test Credentials
+
+After seeding, you can log in with:
+
+### Admin Account
+- **Email**: admin@allfreshfoods.com
+- **Password**: password
+
+### Vendor Accounts
+- **Email**: vendor1@allfreshfoods.com to vendor5@allfreshfoods.com
+- **Password**: password
+
+### Customer Account
+- **Email**: customer@allfreshfoods.com
+- **Password**: password
+
+## Project Structure
+
+```
+app/
+├── Enums/
+│   └── UserRole.php           # User role enumeration
+├── Http/
+│   ├── Controllers/
+│   │   ├── Auth/
+│   │   │   └── RegisterController.php
+│   │   ├── CartController.php
+│   │   ├── CategoryController.php
+│   │   ├── DashboardController.php
+│   │   ├── OrderController.php
+│   │   ├── OrderItemController.php
+│   │   ├── ProductController.php
+│   │   └── VendorDashboardController.php
+│   ├── Requests/
+│   │   ├── StoreCategoryRequest.php
+│   │   ├── UpdateCategoryRequest.php
+│   │   ├── StoreProductRequest.php
+│   │   └── UpdateProductRequest.php
+│   └── Middleware/
+│       └── CheckRole.php
+├── Mail/
+│   └── OrderPlacedMail.php
+├── Models/
+│   ├── Category.php
+│   ├── Order.php
+│   ├── OrderItem.php
+│   ├── Product.php
+│   ├── User.php
+│   └── Vendor.php
+├── Policies/
+│   ├── CategoryPolicy.php
+│   ├── ProductPolicy.php
+│   ├── OrderPolicy.php
+│   └── OrderItemPolicy.php
+└── Services/
+    ├── CartService.php
+    ├── CategoryService.php
+    ├── OrderService.php
+    └── ProductService.php
+
+resources/
+├── views/
+│   ├── admin/
+│   │   ├── dashboard.blade.php
+│   │   ├── categories/
+│   │   ├── products/
+│   │   └── orders/
+│   ├── vendor/
+│   │   ├── dashboard.blade.php
+│   │   ├── products/
+│   │   └── orders/
+│   ├── auth/
+│   │   ├── register-customer.blade.php
+│   │   └── register-vendor.blade.php
+│   ├── cart/
+│   │   └── index.blade.php
+│   ├── orders/
+│   │   └── show.blade.php
+│   ├── products/
+│   │   └── index.blade.php
+│   ├── emails/
+│   │   └── order-placed.blade.php
+│   ├── layouts/
+│   │   ├── app.blade.php
+│   │   ├── admin.blade.php
+│   │   ├── vendor.blade.php
+│   │   └── navigation.blade.php
+│   └── welcome.blade.php
+```
+
+## Key Features Implementation
+
+### 1. Multi-Vendor Product Catalog
+- Products belong to specific vendors
+- Categories for product organization
+- Image upload support
+- Stock management with validation
+
+### 2. Shopping Cart System
+- Session-based cart storage
+- Quantity selection and editing
+- Stock validation
+- Multi-vendor cart support
+
+### 3. Order Management
+- Orders split into vendor-specific order items
+- Each order item tracked separately
+- Status updates per vendor
+- Order synchronization based on item statuses
+
+### 4. Authorization & Policies
+- Gate-based middleware for route protection
+- Policy-based authorization for resource access
+- Vendors can only manage their own products
+- Admins have full system access
+
+### 5. Email Notifications
+- Order confirmation emails
+- Markdown-based templates
+- Queued for performance
+- Order details and tracking
+
+## Database Schema
+
+### Users
+- id, name, email, password, role (enum), vendor_id
+
+### Vendors
+- id, name, timestamps
+
+### Categories
+- id, name, timestamps
+
+### Products
+- id, vendor_id, category_id, name, description, price, stock, image_path, timestamps
+
+### Orders
+- id, user_id, total_amount, status, timestamps
+
+### Order Items
+- id, order_id, product_id, vendor_id, quantity, price, status, timestamps
+
+## API Routes
+
+### Public Routes
+- `GET /` - Welcome page
+- `GET /products` - Public product catalog
+- `GET /register/customer` - Customer registration
+- `GET /register/vendor` - Vendor registration
+
+### Authenticated Routes
+- `GET /dashboard` - Role-based dashboard redirect
+- `GET /cart` - View shopping cart
+- `POST /cart/{product}` - Add to cart
+- `PUT /cart/{product}` - Update cart quantity
+- `DELETE /cart/{product}` - Remove from cart
+- `POST /orders` - Checkout and create order
+- `GET /orders/{order}` - View order details
+
+### Admin Routes (Prefix: /admin)
+- `GET /dashboard` - Admin dashboard
+- Resource routes for categories
+- Resource routes for products
+- `GET /orders` - All orders
+
+### Vendor Routes (Prefix: /vendor)
+- `GET /dashboard` - Vendor dashboard
+- Resource routes for products (vendor's only)
+- `GET /orders` - Vendor's order items
+- `PUT /order/item/{orderItem}` - Update order item status
+
+## Testing
+
+Run the test suite:
+
+```bash
+php artisan test
+```
+
+Key test files:
+- `tests/Feature/ProductAuthorizationTest.php`
+- `tests/Feature/VendorOrderTest.php`
+- `tests/Feature/Auth/RegistrationTest.php`
+
+## Development Notes
+
+### Queue Configuration
+
+For development, you can use sync driver:
+```env
+QUEUE_CONNECTION=sync
+```
+
+For production, use database or Redis:
+```env
+QUEUE_CONNECTION=database
+```
+
+Then run:
+```bash
+php artisan queue:table
+php artisan migrate
+php artisan queue:work
+```
+
+### Storage
+
+Product images are stored in `storage/app/public/products/`. Make sure to run:
+```bash
+php artisan storage:link
+```
+
+## Troubleshooting
+
+### Images Not Showing
+- Ensure `php artisan storage:link` has been run
+- Check `APP_URL` is set correctly in `.env`
+- Verify storage permissions: `chmod -R 775 storage`
+
+### Queue Jobs Not Processing
+- Check `QUEUE_CONNECTION` in `.env`
+- Run `php artisan queue:work` in a separate terminal
+- Check failed jobs: `php artisan queue:failed`
+
+### Authorization Errors
+- Clear config cache: `php artisan config:clear`
+- Check user roles are properly assigned
+- Verify policies are registered in `AppServiceProvider`
 
 ## Contributing
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+1. Fork the repository
+2. Create a feature branch
+3. Commit your changes
+4. Push to the branch
+5. Create a Pull Request
 
 ## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+This project is open-sourced software licensed under the MIT license.
+
+## Support
+
+For issues and questions, please open an issue in the GitHub repository.
+
+## Acknowledgments
+
+- Built with Laravel 11
+- UI components from Laravel Breeze
+- Styled with Tailwind CSS
+- Icons from Heroicons
