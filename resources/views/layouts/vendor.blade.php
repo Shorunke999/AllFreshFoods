@@ -15,9 +15,9 @@
                 My Products
             </a>
 
-            <a href="{{ route('vendor.orders.index') }}"
+            <a href="{{ route('vendor.orderItems.index') }}"
                class="group flex items-center px-2 py-2 text-sm font-medium rounded-md mt-1 {{ request()->routeIs('vendor.orders.*') ? 'bg-indigo-900' : 'hover:bg-indigo-700' }}">
-                Orders
+                Order Items
             </a>
         </nav>
     </aside>

@@ -55,7 +55,7 @@ Route::middleware(['auth'])->group(function () {
         ->group(function () {
             Route::get('/dashboard', [VendorDashboardController::class, 'index'])->name('dashboard');
             Route::resource('products', ProductController::class);
-            Route::resource('order', OrderItemController::class)->only('update');
+            Route::resource('orderItems', OrderItemController::class)->only(['update','index']);
     });
     Route::resource('orders', OrderController::class)->only(['index','store','show']);
 });

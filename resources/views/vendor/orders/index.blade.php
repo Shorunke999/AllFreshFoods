@@ -41,28 +41,24 @@
                             <td class="px-6 py-4 whitespace-nowrap text-sm">
                                 <span class="px-2 py-1 text-xs rounded
                                     @if($item->status === 'pending') bg-yellow-100 text-yellow-800
-                                    @elseif($item->status === 'processing') bg-blue-100 text-blue-800
-                                    @elseif($item->status === 'shipped') bg-purple-100 text-purple-800
-                                    @elseif($item->status === 'delivered') bg-green-100 text-green-800
+                                    @elseif($item->status === 'fulfilled') bg-green-100 text-green-800
                                     @else bg-gray-100 text-gray-800
                                     @endif">
-                                    {{ ucfirst($item->status) }}
+                                    {{ ucfirst($item->status->value) }}
                                 </span>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                 {{ $item->created_at->format('M d, Y') }}
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-right text-sm">
-                                <form action="{{ route('vendor.order.item.update', $item) }}" method="POST" class="inline">
+                                <form action="{{ route('vendor.orderItems.update', $item) }}" method="POST" class="inline">
                                     @csrf
                                     @method('PUT')
                                     <select name="status"
                                             onchange="this.form.submit()"
                                             class="text-xs border-gray-300 rounded">
                                         <option value="pending" {{ $item->status === 'pending' ? 'selected' : '' }}>Pending</option>
-                                        <option value="processing" {{ $item->status === 'processing' ? 'selected' : '' }}>Processing</option>
-                                        <option value="shipped" {{ $item->status === 'shipped' ? 'selected' : '' }}>Shipped</option>
-                                        <option value="delivered" {{ $item->status === 'delivered' ? 'selected' : '' }}>Delivered</option>
+                                        <option value="fulfilled" {{ $item->status === 'fulfilled' ? 'selected' : '' }}>Fulfilled</option>
                                     </select>
                                 </form>
                             </td>

@@ -35,7 +35,7 @@
                 </div>
                 <div>
                     <p class="text-sm text-gray-600">Total Amount</p>
-                    <p class="font-bold text-lg text-green-600">${{ number_format($order->total_amount, 2) }}</p>
+                    <p class="font-bold text-lg text-green-600">${{ number_format($order->total, 2) }}</p>
                 </div>
             </div>
         </div>

@@ -7,7 +7,7 @@
 @section('content')
 <div class="py-12 max-w-7xl mx-auto sm:px-6 lg:px-8">
 
-    <a href="{{  url('/products') }}"
+    <a href="{{ auth()->user()->role->value == 'admin' ? url()->previous() : url('/products') }}"
         class="inline-flex items-center gap-1 bg-gray-100 hover:bg-gray-200
             text-gray-700 px-3 py-2 rounded-md text-sm mb-4">
         ← Finish

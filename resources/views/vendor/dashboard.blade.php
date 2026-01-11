@@ -9,7 +9,7 @@
             <!-- My Products -->
             <div class="bg-white overflow-hidden shadow-sm rounded-lg p-6">
                 <div class="text-gray-500 text-sm font-medium">My Products</div>
-                <div class="text-3xl font-bold text-gray-900 mt-2">{{ $stats['product_count'] ?? 0 }}</div>
+                <div class="text-3xl font-bold text-gray-900 mt-2">{{ $stats['products_count'] ?? 0 }}</div>
             </div>
 
             <!-- Pending Orders -->
@@ -36,7 +36,7 @@
                     </a>
                 </div>
 
-                @if(isset($recent_products) && $recent_products->count())
+                @if(isset($stats['recent_products']) && $stats['recent_products']->count())
                     <div class="overflow-x-auto">
                         <table class="min-w-full divide-y divide-gray-200">
                             <thead class="bg-gray-50">
@@ -49,7 +49,7 @@
                                 </tr>
                             </thead>
                             <tbody class="bg-white divide-y divide-gray-200">
-                                @foreach($recent_products as $product)
+                                @foreach($stats['recent_products'] as $product)
                                 <tr>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                                         {{ $product->name }}
