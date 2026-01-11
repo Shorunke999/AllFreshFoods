@@ -149,13 +149,6 @@ This will create:
 - 50 Products distributed across vendors
 - Sample orders with order items
 
-### Test Credential(Login)
--custmer email is  test@example1.com
--vendor email is  test@example.com
--admin email is  admin@example.com
-
-password is "password"
-
 
 ### 10. Build Frontend Assets
 
@@ -191,7 +184,7 @@ After seeding, you can log in with:
 - **Password**: password
 
 ### Vendor Accounts
-- **Email**: vendor1@allfreshfoods.com to vendor5@allfreshfoods.com
+- **Email**: vendor1@allfreshfoods.com 
 - **Password**: password
 
 ### Customer Account
