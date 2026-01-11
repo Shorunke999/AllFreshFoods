@@ -2,6 +2,10 @@
 
 namespace Database\Factories;
 
+use App\Enums\OrderItemStatus;
+use App\Models\Order;
+use App\Models\Product;
+use App\Models\Vendor;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -16,8 +20,13 @@ class OrderItemFactory extends Factory
      */
     public function definition(): array
     {
-        return [
-            //
+          return [
+            'order_id' => Order::factory(),
+            'product_id' => Product::factory(),
+            'vendor_id' => Vendor::factory(),
+            'quantity' => 1,
+            'price' => 100,
+            'status' => OrderItemStatus::PENDING,
         ];
     }
 }

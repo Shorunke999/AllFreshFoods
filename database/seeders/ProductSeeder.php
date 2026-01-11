@@ -2,7 +2,9 @@
 
 namespace Database\Seeders;
 
+use App\Models\Category;
 use App\Models\Product;
+use App\Models\Vendor;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -13,6 +15,16 @@ class ProductSeeder extends Seeder
      */
     public function run(): void
     {
-        Product::factory()->count(50)->create();
+        $vendors = Vendor::all();
+        $categories = Category::all();
+
+        foreach ($vendors as $vendor) {
+            Product::factory()
+                ->count(rand(3, 6))
+                ->create([
+                    'vendor_id' => $vendor->id,
+                    'category_id' => $categories->random()->id,
+                ]);
+        }
     }
 }

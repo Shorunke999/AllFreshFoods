@@ -16,7 +16,17 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        User::factory(9)->create();
+        User::factory(5)->create(
+            [
+                'role' => UserRole::VENDOR
+            ]
+        );
+
+         User::factory(5)->create(
+            [
+                'role' => UserRole::CUSTOMER
+            ]
+        );
 
         User::factory()->create([
             'name' => 'Test User',
@@ -31,16 +41,12 @@ class DatabaseSeeder extends Seeder
             'role' => UserRole::ADMIN->value,
         ]);
 
-        $users = User::where('role', UserRole::VENDOR->value)->get();
-        $users->each(fn ($user) =>
-            Vendor::factory()->create([
-                'user_id' => $user->id,
-            ])
-        );
 
         $this->call([
             CategorySeeder::class,
+            VendorSeeder::class,
             ProductSeeder::class,
+            OrderSeeder::class
         ]);
     }
 }

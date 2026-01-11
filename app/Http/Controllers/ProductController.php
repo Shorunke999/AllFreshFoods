@@ -22,14 +22,13 @@ class ProductController extends Controller
 
     public function index()
     {
-        $this->authorize('viewAny', Product::class);
         $products = $this->service->listProducts(auth()->user());
         $role = auth()->user()->role->value;
 
         return view($role.'.products.index', [
             'products' => $products,
             'categories' => Category::all(),
-            'vendors' => $role === UserRole::ADMIN->value? Vendor::all() : null,
+            'vendors' => $role === UserRole::ADMIN->value ? Vendor::all() : null,
         ]);
     }
 

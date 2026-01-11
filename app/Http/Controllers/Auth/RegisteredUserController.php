@@ -70,10 +70,6 @@ class RegisteredUserController extends Controller
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
-        // Create vendor first
-        $vendor = Vendor::create([
-            'name' => $request->vendor_name,
-        ]);
 
         // Create user linked to vendor
         $user = User::create([
@@ -81,7 +77,11 @@ class RegisteredUserController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'role' => UserRole::VENDOR,
-            'vendor_id' => $vendor->id,
+        ]);
+         // Create vendor first
+        $vendor = Vendor::create([
+            'name' => $request->vendor_name,
+            'user_id' => $user->id
         ]);
 
         event(new Registered($user));

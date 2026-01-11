@@ -9,7 +9,7 @@
             <!-- Total Vendors -->
             <div class="bg-white overflow-hidden shadow-sm rounded-lg p-6">
                 <div class="text-gray-500 text-sm font-medium">Total Vendors</div>
-                <div class="text-3xl font-bold text-gray-900 mt-2">{{ $stats['total_vendors'] ?? 0 }}</div>
+                <div class="text-3xl font-bold text-gray-900 mt-2">{{ $stats['total_vendor'] ?? 0 }}</div>
             </div>
 
             <!-- Total Products -->
